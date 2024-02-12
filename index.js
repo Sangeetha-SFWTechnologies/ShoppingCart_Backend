@@ -2,15 +2,16 @@ const express = require('express')
 const app = express();
 const connection = require('./database')
 const dotenv = require('dotenv').config()
-const path = require('path');
+// const path = require('path');
 
 // const api = require('./api')
 
 const swaggerJsDoc = require('swagger-jsdoc'),
       swaggerUi = require('swagger-ui-express')
-const bodyparser = require('body-parser')
+// const bodyparser = require('body-parser')
 
-const apiRouter = require('./api');
+// const apiRouter = require('./api');
+const controller = require('./Product/product.controller')
 
 app.listen(process.env.DB_PORT, function(){
     console.log("App listening on port", process.env.DB_PORT);
@@ -25,7 +26,8 @@ app.listen(process.env.DB_PORT, function(){
     })
 })
 
-app.use('/', apiRouter); 
+// app.use('/', apiRouter); 
+app.use('/',controller);
 
 const options = {
     definition:{
