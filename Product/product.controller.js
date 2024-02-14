@@ -4,6 +4,41 @@ const productService = require('./product.service')
 
 router.use(express.json());
 
+/**
+ * @swagger
+ * /products:
+ *   get:
+ *     summary: Retrieve all products
+ *     description: Retrieve a list of all products
+ *     responses:
+ *       '200':
+ *         description: A list of products
+ *   post:
+ *     summary: Create a new product
+ *     description: Create a new product.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 description: The name of the product.
+ *               price:
+ *                 type: number
+ *                 description: The price of the product.
+ *               description:
+ *                 type: string
+ *                 description: The description of the product.
+ *     responses:
+ *       '201':
+ *         description: Product created successfully
+ *       '400':
+ *         description: Invalid request body
+ */
+
 // To get all products
 router.get('/', async (req, res) => {
     try {
