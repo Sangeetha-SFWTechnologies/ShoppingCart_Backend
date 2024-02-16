@@ -2,16 +2,11 @@ const express = require('express')
 const app = express();
 const connection = require('./database')
 const dotenv = require('dotenv').config()
-// const path = require('path');
-
-// const api = require('./api')
 
 const swaggerJsDoc = require('swagger-jsdoc'),
       swaggerUi = require('swagger-ui-express')
-// const bodyparser = require('body-parser')
 
-// const apiRouter = require('./api');
-const controller = require('./Product/product.controller')
+const productRoutes = require('./Product/product.controller')
 
 app.listen(process.env.DB_PORT, function(){
     console.log("App listening on port", process.env.DB_PORT);
@@ -26,14 +21,13 @@ app.listen(process.env.DB_PORT, function(){
     })
 })
 
-// app.use('/', apiRouter); 
-app.use('/',controller);
+app.use('/products',productRoutes);
 
 const options = {
     definition:{
         openapi: '3.0.0',
         info: {
-            title : 'Node JS API project for MySQL',
+            title : 'Node JS API project',
             description: 'This is a sample swagger application',
             version: '1.0.6'
         },
@@ -44,7 +38,7 @@ const options = {
         ]
     },
 
-    apis: ['./api.js']
+    apis: ['./product/product.controller.js']
 }
 
 const swaggerSpec = swaggerJsDoc(options)
@@ -54,20 +48,3 @@ if (swaggerSpec instanceof Error) {
 } else {
     app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 }
-
-// console.log("Resolved path:", path.resolve('./api.js'));
-
-// /**
-//  * @swagger
-//  * /:
-//  * get:
-//  *      summary: Check if get method is working or not
-//  *      description: Check if get method is working or not
-//  *      responses: 
-//  *          200:
-//  *              description: Hey There
-//  */
-
-// app.get('/', function(req,res){
-//     res.send('Hey There')
-// })
