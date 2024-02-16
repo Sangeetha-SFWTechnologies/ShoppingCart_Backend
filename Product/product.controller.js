@@ -37,6 +37,70 @@ router.use(express.json());
  *         description: Product created successfully
  *       '400':
  *         description: Invalid request body
+ * /products/{id}:
+ *   get:
+ *     summary: Retrieve a product by ID
+ *     description: Retrieve a single product by its ID.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID of the product to retrieve.
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       '200':
+ *         description: A single product object
+ *       '404':
+ *         description: Product not found
+ *   put:
+ *     summary: Update a product
+ *     description: Update an existing product by its ID.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID of the product to update.
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 description: The new name of the product.
+ *               price:
+ *                 type: number
+ *                 description: The new price of the product.
+ *               description:
+ *                 type: string
+ *                 description: The new description of the product.
+ *     responses:
+ *       '200':
+ *         description: Product updated successfully
+ *       '400':
+ *         description: Invalid request body
+ *       '404':
+ *         description: Product not found
+ *   delete:
+ *     summary: Delete a product by ID
+ *     description: Delete a single product by its ID.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID of the product to delete.
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       '200':
+ *         description: Product deleted successfully
+ *       '404':
+ *         description: Product not found
  */
 
 // To get all products
@@ -89,8 +153,15 @@ router.put('/:id', async (req, res) => {
 });
 
 // Delete Product
-router.delete('/:id', function(req, res){
-    res.send('Delete product by ID');
+router.delete('/:id', async (req, res) => {
+    try {
+        const productId = req.params.id;
+        const result = await productService.deleteProduct(productId);
+        res.json(result);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Internal Server Error');
+    }
 });
 
 module.exports = router;

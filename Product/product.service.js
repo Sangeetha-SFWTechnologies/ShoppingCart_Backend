@@ -1,6 +1,6 @@
 const connection = require('../database');
 
-module.exports.getAllProducts = async () => {
+getAllProducts = async () => {
     try {
         const [rows] = await connection.promise().query("SELECT * FROM product_list");
         return rows; 
@@ -9,7 +9,7 @@ module.exports.getAllProducts = async () => {
     }
 }
 
-module.exports.getProductById = async (productId) => {
+getProductById = async (productId) => {
     try {
         const [rows] = await connection.promise().query("SELECT * FROM product_list WHERE id = ?",[productId]);
         return rows; 
@@ -18,7 +18,7 @@ module.exports.getProductById = async (productId) => {
     }
 }
 
-module.exports.createProduct = async (name, price, description) => {
+createProduct = async (name, price, description) => {
     try {
         const result = await connection.promise().query('INSERT INTO product_list (name, price, description) VALUES (?, ?, ?)', [name, price, description]);
         const newProductId = result[0].insertId;
@@ -28,7 +28,7 @@ module.exports.createProduct = async (name, price, description) => {
     }
 };
 
-module.exports.updateProduct = async (productId, newData) => {
+updateProduct = async (productId, newData) => {
     try {
         const result = await connection.promise().query('UPDATE product_list SET name = ?, price = ?, description = ? WHERE id = ?', [newData.name, newData.price, newData.description, productId]);
 
@@ -41,3 +41,15 @@ module.exports.updateProduct = async (productId, newData) => {
         throw error;
     }
 };
+
+deleteProduct = async (productId)  => {
+    try{
+        const deletedProduct = await connection.promise().query('DELETE FROM product_list WHERE id = ?', [productId]);
+
+        return { message: 'Product Deleted Successfully'};
+    }catch (error) {
+        throw error;
+    }
+}
+
+module.exports = {getAllProducts, getProductById, createProduct,deleteProduct, updateProduct }
